@@ -18,6 +18,7 @@ namespace Roommates
             Console.WriteLine("Hello World!");
 
             RoomRepository roomRepo = new RoomRepository(CONNECTION_STRING);
+            RoommateRepository roommateRepo = new RoommateRepository(CONNECTION_STRING);
 
             Console.WriteLine("Getting All Rooms:");
             Console.WriteLine();
@@ -72,6 +73,19 @@ namespace Roommates
             foreach (Room room in allRooms)
             {
                 Console.WriteLine($"{room.Id} {room.Name} {room.MaxOccupancy}");
+            }
+
+            // >>>>>>>>>>>>>>>>>>>>>>>.
+            // >>>>>>>>>>>>>>>>>>>>>>>.
+            // >>>>>>>>>>>>>>>>>>>>>>>.
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine("ROOMATE!!");
+
+            List<Roommate> allRoommates = roommateRepo.GetAll();
+            
+            foreach (Roommate roomy in allRoommates)
+            {
+                Console.WriteLine($"{roomy.Id}, {roomy.Firstname} {roomy.Lastname}, {roomy.MoveInDate}");
             }
         }
     }
