@@ -82,9 +82,66 @@ namespace Roommates.Repositories
             }
         }
 
+
+        ///>>>>>>>>>>>>>>>>>>>>>>>
+        ///>>>>>>>>>>>>>>>>>>>>>>>
+        ///>>>>>>>>>>>>>>>>>>>>>>>
+        public List<Roommate> GetRoommatesByRoomId(int roomId)
+        {
+
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"Select 
+                                        roommate.Id as roommateId, 
+                                        Firstname, 
+                                        Lastname, 
+                                        RentPortion, 
+                                        MoveInDate, 
+                                        Name, 
+                                        MaxOccupancy, 
+                                        RoomId 
+                                        FROM Roommate 
+                                        Left Join Room ON Room.id = Roommate.RoomId 
+                                        WHERE RoomId = @id";
+                    cmd.Parameters.AddWithValue("@id", roomId);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    List<Roommate> roommatesByRoom = new List<Roommate>();
+
+
+                    while (reader.Read())
+                    {
+                        Roommate roomy = new Roommate
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("roommateId")),
+                            Firstname = reader.GetString(reader.GetOrdinal("Firstname")),
+                            Lastname = reader.GetString(reader.GetOrdinal("Lastname")),
+                            RentPortion = reader.GetInt32(reader.GetOrdinal("RentPortion")),
+                            MoveInDate = reader.GetDateTime(reader.GetOrdinal("MoveInDate")),
+                            Room = new Room
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("RoomId")),
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                MaxOccupancy = reader.GetInt32(reader.GetOrdinal("MaxOccupancy"))
+                            }
+                        };
+                        roommatesByRoom.Add(roomy);
+                    }
+
+                    reader.Close();
+                    return roommatesByRoom;
+
+                }
+
+            }
+        }
+
         /// <summary>
         ///  Returns a single room with the given id.
         /// </summary>
+        /// 
         public Room GetById(int id)
         {
             using (SqlConnection conn = Connection)

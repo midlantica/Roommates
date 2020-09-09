@@ -87,6 +87,12 @@ namespace Roommates
             {
                 Console.WriteLine($"{roomy.Id}, {roomy.Firstname} {roomy.Lastname}, {roomy.MoveInDate}");
             }
+
+            foreach (roommatesByRoom roomy in allRoommates)
+            {
+                Console.WriteLine($"{roomy.Id}, {roomy.Firstname} {roomy.Lastname}, {roomy.MoveInDate}");
+            }
+
         }
     }
 }
